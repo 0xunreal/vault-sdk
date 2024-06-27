@@ -28,7 +28,7 @@ importers:
         version: 1.0.2(bufferutil@4.0.6)(utf-8-validate@5.0.9)
       '@mercurial-finance/optimist':
         specifier: ^0.1.4
-        version: 0.1.4(@solana/spl-token@0.4.6(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9))(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bn.js@5.2.1)
+        version: 0.1.4(@solana/spl-token@0.4.7(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9))(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bn.js@5.2.1)
       '@mercurial-finance/port-sdk':
         specifier: 0.2.69
         version: 0.2.69(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bn.js@5.2.1)(bufferutil@4.0.6)(utf-8-validate@5.0.9)
@@ -54,8 +54,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       '@solana/spl-token':
-        specifier: 0.4.6
-        version: 0.4.6(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9)
+        specifier: ^0.4.7
+        version: 0.4.7(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9)
       '@solana/spl-token-registry':
         specifier: 0.2.1105
         version: 0.2.1105
@@ -671,9 +671,10 @@ packages:
   '@solana/options@2.0.0-preview.2':
     resolution: {integrity: sha512-FAHqEeH0cVsUOTzjl5OfUBw2cyT8d5Oekx4xcn5hn+NyPAfQJgM3CEThzgRD6Q/4mM5pVUnND3oK/Mt1RzSE/w==}
 
-  '@solana/spl-token-group@0.0.4':
-    resolution: {integrity: sha512-7+80nrEMdUKlK37V6kOe024+T7J4nNss0F8LQ9OOPYdWCCfJmsGUzVx2W3oeizZR4IHM6N4yC9v1Xqwc3BTPWw==}
+  '@solana/spl-token-group@0.0.3':
+    resolution: {integrity: sha512-oEHb/ATHbbzTwP1lNOhLM90lYcUgriMf7KA0L/W/t2OzBplS+5odNDRLccJ7lPstfrZLAAQXbqGGG7E27GXxQQ==}
     engines: {node: '>=16'}
+    deprecated: CommonJS exports were broken in this release
     peerDependencies:
       '@solana/web3.js': ^1.91.6
 
@@ -705,11 +706,11 @@ packages:
     peerDependencies:
       '@solana/web3.js': ^1.47.4
 
-  '@solana/spl-token@0.4.6':
-    resolution: {integrity: sha512-1nCnUqfHVtdguFciVWaY/RKcQz1IF4b31jnKgAmjU9QVN1q7dRUkTEWJZgTYIEtsULjVnC9jRqlhgGN39WbKKA==}
+  '@solana/spl-token@0.4.7':
+    resolution: {integrity: sha512-HvfieHwdGfoz09tl1Ph4uNR48pzl2oXfgMC3NeQ0v3D/Dk6ejTGNPR6xgPbPQ1qJ0ZuyNZOrHudF+GZH3dBybA==}
     engines: {node: '>=16'}
     peerDependencies:
-      '@solana/web3.js': ^1.91.6
+      '@solana/web3.js': ^1.93.1
 
   '@solana/spl-type-length-value@0.1.0':
     resolution: {integrity: sha512-JBMGB0oR4lPttOZ5XiUGyvylwLQjt1CPJa6qQ5oM+MBCndfjz2TKKkw0eATlLLcYmq1jBVsNlJ2cD6ns2GR7lA==}
@@ -3009,9 +3010,9 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@mercurial-finance/optimist@0.1.4(@solana/spl-token@0.4.6(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9))(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bn.js@5.2.1)':
+  '@mercurial-finance/optimist@0.1.4(@solana/spl-token@0.4.7(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9))(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bn.js@5.2.1)':
     dependencies:
-      '@solana/spl-token': 0.4.6(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9)
+      '@solana/spl-token': 0.4.7(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9)
       '@solana/web3.js': 1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
       bn.js: 5.2.1
 
@@ -3504,7 +3505,7 @@ snapshots:
       '@solana/codecs-core': 2.0.0-preview.2
       '@solana/codecs-numbers': 2.0.0-preview.2
 
-  '@solana/spl-token-group@0.0.4(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(fastestsmallesttextencoderdecoder@1.0.22)':
+  '@solana/spl-token-group@0.0.3(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(fastestsmallesttextencoderdecoder@1.0.22)':
     dependencies:
       '@solana/codecs': 2.0.0-preview.2(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/spl-type-length-value': 0.1.0
@@ -3578,11 +3579,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@solana/spl-token@0.4.6(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9)':
+  '@solana/spl-token@0.4.7(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(bufferutil@4.0.6)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.9)':
     dependencies:
       '@solana/buffer-layout': 4.0.0
       '@solana/buffer-layout-utils': 0.2.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
-      '@solana/spl-token-group': 0.0.4(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/spl-token-group': 0.0.3(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/spl-token-metadata': 0.1.4(@solana/web3.js@1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9))(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/web3.js': 1.72.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
       buffer: 6.0.3
