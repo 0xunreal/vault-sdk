@@ -4,11 +4,9 @@ import { TokenInfo } from '@solana/spl-token-registry';
 
 import { StrategyProgram } from '../constants';
 import type { AffiliateVaultProgram, VaultProgram, VaultState } from '../types';
-import ApricotWithoutLMHandler from './apricotWithoutLM';
 import FranciumHandler from './francium';
 import MangoHandler from './mangoV4';
 import TulipHandler from './tulip';
-import DriftHandler from './drift';
 import PortWithLMHandler from './portWithLM';
 import PortWithoutLMHandler from './portWithoutLM';
 import SolendWithLMHandler from './solendWithLM';
@@ -105,16 +103,12 @@ export const getStrategyHandler = (
       return new PortWithLMHandler(strategyProgramAddresses.portFinance);
     case 'francium':
       return new FranciumHandler();
-    case 'apricotWithoutLM':
-      return new ApricotWithoutLMHandler();
     case 'mango':
       return new MangoHandler(cluster, program);
     case 'tulip':
       return new TulipHandler();
     case 'vault':
       return new VaultHandler();
-    case 'drift':
-      return new DriftHandler(cluster, program);
     case 'frakt':
       return new FraktHandler(program);
     case 'cypher':
