@@ -1,4 +1,15 @@
-import { ASSOCIATED_TOKEN_PROGRAM_ID, Token, TOKEN_PROGRAM_ID, NATIVE_MINT } from '@solana/spl-token';
+import {
+  createAssociatedTokenAccountInstruction,
+  getAccount,
+  getAssociatedTokenAddress,
+  getOrCreateAssociatedTokenAccount,
+  createCloseAccountInstruction,
+  TOKEN_PROGRAM_ID,
+  NATIVE_MINT,
+  AccountLayout,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  Account
+} from '@solana/spl-token';
 import {
   Connection,
   ParsedAccountData,
@@ -7,53 +18,54 @@ import {
   SYSVAR_CLOCK_PUBKEY,
   TransactionInstruction,
 } from '@solana/web3.js';
-import { AccountInfo, AccountLayout, u64 } from '@solana/spl-token';
 import { BN } from '@project-serum/anchor';
 
 import { SEEDS, VAULT_BASE_KEY } from '../constants';
 import { ParsedClockState, VaultProgram } from '../types';
 
+type Optional<T> = T | null;
+
 export const getAssociatedTokenAccount = async (tokenMint: PublicKey, owner: PublicKey) => {
-  return await Token.getAssociatedTokenAddress(ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, tokenMint, owner, true);
+  return await getAssociatedTokenAddress(tokenMint, owner, true, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID);
 };
 
-export const deserializeAccount = (data: Buffer | undefined): AccountInfo | undefined => {
-  if (data == undefined || data.length == 0) {
-    return undefined;
-  }
+// export const deserializeAccount = (data: Buffer | undefined): Account | undefined => {
+//   if (data == undefined || data.length == 0) {
+//     return undefined;
+//   }
 
-  const accountInfo = AccountLayout.decode(data);
-  accountInfo.mint = new PublicKey(accountInfo.mint);
-  accountInfo.owner = new PublicKey(accountInfo.owner);
-  accountInfo.amount = u64.fromBuffer(accountInfo.amount);
+//   const accountInfo = AccountLayout.decode(data);
+//   accountInfo.mint = new PublicKey(accountInfo.mint);
+//   accountInfo.owner = new PublicKey(accountInfo.owner);
+//   accountInfo.amount = BigInt(accountInfo.amount.toString()); // use BigInt
 
-  if (accountInfo.delegateOption === 0) {
-    accountInfo.delegate = null;
-    accountInfo.delegatedAmount = new u64(0);
-  } else {
-    accountInfo.delegate = new PublicKey(accountInfo.delegate);
-    accountInfo.delegatedAmount = u64.fromBuffer(accountInfo.delegatedAmount);
-  }
+//   if (accountInfo.delegateOption === 0) {
+//     accountInfo.delegate = null;
+//     accountInfo.delegatedAmount = BigInt(0);
+//   } else {
+//     accountInfo.delegate = new PublicKey(accountInfo.delegate);
+//     accountInfo.delegatedAmount = BigInt(accountInfo.delegatedAmount.toString()); // use BigInt
+//   }
 
-  accountInfo.isInitialized = accountInfo.state !== 0;
-  accountInfo.isFrozen = accountInfo.state === 2;
+//   accountInfo.isInitialized = accountInfo.state !== 0;
+//   accountInfo.isFrozen = accountInfo.state === 2;
 
-  if (accountInfo.isNativeOption === 1) {
-    accountInfo.rentExemptReserve = u64.fromBuffer(accountInfo.isNative);
-    accountInfo.isNative = true;
-  } else {
-    accountInfo.rentExemptReserve = null;
-    accountInfo.isNative = false;
-  }
+//   if (accountInfo.isNativeOption === 1) {
+//     accountInfo.rentExemptReserve = BigInt(accountInfo.isNative.toString()); // use BigInt
+//     accountInfo.isNative = true;
+//   } else {
+//     accountInfo.rentExemptReserve = null;
+//     accountInfo.isNative = false;
+//   }
 
-  if (accountInfo.closeAuthorityOption === 0) {
-    accountInfo.closeAuthority = null;
-  } else {
-    accountInfo.closeAuthority = new PublicKey(accountInfo.closeAuthority);
-  }
+//   if (accountInfo.closeAuthorityOption === 0) {
+//     accountInfo.closeAuthority = null;
+//   } else {
+//     accountInfo.closeAuthority = new PublicKey(accountInfo.closeAuthority);
+//   }
 
-  return accountInfo;
-};
+//   return accountInfo;
+// };
 
 export const getOrCreateATAInstruction = async (
   tokenMint: PublicKey,
@@ -65,22 +77,16 @@ export const getOrCreateATAInstruction = async (
 ): Promise<[PublicKey, TransactionInstruction?]> => {
   let toAccount;
   try {
-    toAccount = await Token.getAssociatedTokenAddress(
-      ASSOCIATED_TOKEN_PROGRAM_ID,
-      TOKEN_PROGRAM_ID,
-      tokenMint,
-      owner,
-      true,
-    );
+    toAccount = await getAssociatedTokenAddress(tokenMint, owner, true, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID);
     const account = await connection.getAccountInfo(toAccount);
     if (!account) {
-      const ix = Token.createAssociatedTokenAccountInstruction(
-        ASSOCIATED_TOKEN_PROGRAM_ID,
-        TOKEN_PROGRAM_ID,
-        tokenMint,
+      const ix = createAssociatedTokenAccountInstruction(
+        opt?.payer || owner,
         toAccount,
         owner,
-        opt?.payer || owner,
+        tokenMint,
+        TOKEN_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID
       );
       return [toAccount, ix];
     }
@@ -133,17 +139,13 @@ export const wrapSOLInstruction = (from: PublicKey, to: PublicKey, amount: BN): 
 };
 
 export const unwrapSOLInstruction = async (walletPublicKey: PublicKey) => {
-  const wSolATAAccount = await Token.getAssociatedTokenAddress(
-    ASSOCIATED_TOKEN_PROGRAM_ID,
-    TOKEN_PROGRAM_ID,
+  const wSolATAAccount = await getAssociatedTokenAddress(
     NATIVE_MINT,
     walletPublicKey,
-    true,
   );
 
   if (wSolATAAccount) {
-    const closedWrappedSolInstruction = Token.createCloseAccountInstruction(
-      TOKEN_PROGRAM_ID,
+    const closedWrappedSolInstruction = createCloseAccountInstruction(
       wSolATAAccount,
       walletPublicKey,
       walletPublicKey,

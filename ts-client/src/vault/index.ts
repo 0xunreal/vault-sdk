@@ -8,14 +8,13 @@ import {
   SYSVAR_RENT_PUBKEY,
   SystemProgram,
 } from '@solana/web3.js';
-import { MintLayout, TOKEN_PROGRAM_ID, u64, NATIVE_MINT } from '@solana/spl-token';
+import { MintLayout, TOKEN_PROGRAM_ID, NATIVE_MINT, unpackAccount } from '@solana/spl-token';
 import { TokenInfo } from '@solana/spl-token-registry';
 
 import { AffiliateInfo, AffiliateVaultProgram, VaultImplementation, VaultProgram, VaultState } from './types';
 import {
   chunkedFetchMultipleVaultAccount,
   chunkedGetMultipleAccountInfos,
-  deserializeAccount,
   getAssociatedTokenAccount,
   getLpSupply,
   getOnchainTime,
@@ -70,7 +69,7 @@ const getAllVaultState = async (tokenInfos: Array<TokenInfo>, program: VaultProg
     if (!vaultAccountPda) throw new Error('Missing vault account pda');
     const vaultLpAccount = vaultLpAccounts[index];
     if (!vaultLpAccount) throw new Error('Missing vault lp account');
-    const lpSupply = new BN(u64.fromBuffer(MintLayout.decode(vaultLpAccount.data).supply));
+    const lpSupply = new BN(MintLayout.decode(vaultLpAccount.data).supply.toString());
 
     return { ...vaultAccountPda, vaultState, lpSupply };
   });
@@ -92,7 +91,7 @@ const getAllVaultStateByPda = async (tokensInfoPda: Array<TokenInfoPda>, program
     if (!vaultAccountPda) throw new Error('Missing vault account pda');
     const vaultLpAccount = vaultLpAccounts[index];
     if (!vaultLpAccount) throw new Error('Missing vault lp account');
-    const lpSupply = new BN(u64.fromBuffer(MintLayout.decode(vaultLpAccount.data).supply));
+    const lpSupply = new BN(MintLayout.decode(vaultLpAccount.data).supply.toString());
 
     return { ...vaultAccountPda, vaultState, lpSupply };
   });
@@ -131,7 +130,7 @@ const getVaultLiquidity = async (connection: Connection, tokenVaultPda: PublicKe
   const vaultLiquidityResponse = await connection.getAccountInfo(tokenVaultPda);
   if (!vaultLiquidityResponse) return null;
 
-  const vaultLiquiditySerialize = deserializeAccount(vaultLiquidityResponse.data);
+  const vaultLiquiditySerialize = unpackAccount(tokenVaultPda, vaultLiquidityResponse);
   return vaultLiquiditySerialize?.amount.toString() || null;
 };
 
@@ -228,10 +227,10 @@ export default class VaultImpl implements VaultImplementation {
     return accountsInfo.map((accountInfo) => {
       if (!accountInfo) return new BN(0);
 
-      const accountBalance = deserializeAccount(accountInfo.data);
+      const accountBalance = unpackAccount(new PublicKey("So11111111111111111111111111111111111111112"), accountInfo);
       if (!accountBalance) throw new Error('Failed to parse user account for LP token.');
 
-      return new BN(accountBalance.amount);
+      return new BN(accountBalance.amount.toString());
     });
   }
 
@@ -361,12 +360,12 @@ export default class VaultImpl implements VaultImplementation {
       return new BN(0);
     }
 
-    const result = deserializeAccount(accountInfo.data);
+    const result = unpackAccount(address, accountInfo);
     if (result == undefined) {
       throw new Error('Failed to parse user account for LP token.');
     }
 
-    return new BN(result.amount);
+    return new BN(result.amount.toString());
   }
 
   /** To refetch the latest lpSupply */

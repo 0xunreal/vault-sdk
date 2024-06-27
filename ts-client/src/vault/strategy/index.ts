@@ -7,8 +7,6 @@ import type { AffiliateVaultProgram, VaultProgram, VaultState } from '../types';
 import FranciumHandler from './francium';
 import MangoHandler from './mangoV4';
 import TulipHandler from './tulip';
-import PortWithLMHandler from './portWithLM';
-import PortWithoutLMHandler from './portWithoutLM';
 import SolendWithLMHandler from './solendWithLM';
 import SolendWithoutLMHandler from './solendWithoutLM';
 import VaultHandler from './vault';
@@ -97,10 +95,6 @@ export const getStrategyHandler = (
       return new SolendWithoutLMHandler(strategyProgramAddresses.solend);
     case 'solendWithLm':
       return new SolendWithLMHandler(strategyProgramAddresses.solend);
-    case 'portFinanceWithoutLm':
-      return new PortWithoutLMHandler(strategyProgramAddresses.portFinance);
-    case 'portFinanceWithLm':
-      return new PortWithLMHandler(strategyProgramAddresses.portFinance);
     case 'francium':
       return new FranciumHandler();
     case 'mango':
